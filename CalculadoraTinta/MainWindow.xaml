@@ -22,7 +22,7 @@
 
         <InkCanvas Name="canvasTinta" Grid.Row="1"></InkCanvas>
 
-        <Button Grid.Row="2" Name="Borrar" Click="Borrar_Click">Borrar</Button>
+        <Button Grid.Row="2" Name="Borrar" Click="Borrar_Click">Borrar último</Button>
 
         <Grid Grid.Row="3">
             

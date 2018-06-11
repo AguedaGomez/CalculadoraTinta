@@ -13,6 +13,7 @@ namespace CalculadoraTinta
         public int Mode { get; set; }
         public string MssgFeedback { get; set; }
         public bool CompletedOperation { get; set; }
+        public string operation = "";
 
         readonly List<string> numbers = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         readonly List<string> multiplyOperators = new List<string>() { "x", "X", "*" };
@@ -20,7 +21,7 @@ namespace CalculadoraTinta
         readonly string addition = "+";
         readonly string sustraction = "-";
         readonly string equal = "=";
-        string operation = "";
+        
 
         public string EvaluateString(string input)
         {
@@ -93,7 +94,7 @@ namespace CalculadoraTinta
                    if (numbers.Contains(result[result.Length - 1].ToString()))
                     {
                         if (result != input & !result.Contains('*'))
-                            MssgFeedback = "Se han eliminado algunos caracteres no permitidos \n La expresión original reconocida original ha sido: " + input;
+                            MssgFeedback = "Se han eliminado algunos caracteres no permitidos \n La expresión original reconocida ha sido: " + input;
                         result += " = " + new DataTable().Compute(result, null).ToString();
                         CompletedOperation = true;
 

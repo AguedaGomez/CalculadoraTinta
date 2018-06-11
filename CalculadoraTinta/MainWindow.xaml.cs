@@ -42,11 +42,23 @@ namespace CalculadoraTinta
             canvasTinta.StrokeCollected += CanvasTinta_StrokeCollected;
             canvasTinta.StylusUp += CanvasTinta_StylusUp;
             canvasTinta.StylusMove += CanvasTinta_StylusMove;
+            canvasTinta.MouseDown += CanvasTinta_MouseDown;
+            canvasTinta.MouseUp += CanvasTinta_MouseUp;
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             //recognizer = new Recognizer();
 
+        }
+
+        private void CanvasTinta_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            dispatcherTimer.Start();
+        }
+
+        private void CanvasTinta_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            dispatcherTimer.Stop();
         }
 
         private void CanvasTinta_StylusMove(object sender, StylusEventArgs e)
@@ -118,7 +130,9 @@ namespace CalculadoraTinta
 
         private void Borrar_Click(object sender, RoutedEventArgs e)
         {
-            ResetText();
+            recognizer.operation = recognizer.operation.Substring(0, recognizer.operation.Length-1);
+
+            ResetText(recognizer.operation);
         }
 
         private void ResetCanvas()
@@ -133,21 +147,23 @@ namespace CalculadoraTinta
 
         private void Modo1_Checked(object sender, RoutedEventArgs e)
         {
+            Borrar.IsEnabled = true;
             recognizer.Mode = 1;
             ResetCanvas();
-            ResetText();
+            ResetText("");
         }
 
         private void Modo2_Checked(object sender, RoutedEventArgs e)
         {
+            Borrar.IsEnabled = false;
             recognizer.Mode = 2;
             ResetCanvas();
-            ResetText();
+            ResetText("");
         }
 
-        private void ResetText()
+        private void ResetText(string text)
         {
-            textResult = " ";
+            textResult = text;
             textBox.Text = textResult;
         }
     }
