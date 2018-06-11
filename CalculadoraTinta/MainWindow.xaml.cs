@@ -63,6 +63,12 @@ namespace CalculadoraTinta
         {
             m_analyzer.BackgroundAnalyze();
             dispatcherTimer.Stop();
+            if (recognizer.CompletedOperation)
+            {
+                textResult = "";
+                textBox.Text = textResult;
+            }
+
         }
 
         private void CanvasTinta_StrokeCollected(object sender, InkCanvasStrokeCollectedEventArgs e)
@@ -87,35 +93,62 @@ namespace CalculadoraTinta
                         // Como palabra
                         InkWordNode t = leaf as InkWordNode;
                         Rect l = t.Location.GetBounds();
-                         textResult += recognizer.EvaluateString(t.GetRecognizedString());
-                        textBox.Text = textResult;
+                        var result = recognizer.EvaluateString(t.GetRecognizedString());
+
+                        if (textResult!="")
+                        {
+                            if (textResult[textResult.Length - 1] == '?')
+                                textResult = textResult.Replace("?", result);
+                            else
+                                textResult += result;
+                        }
+                        else
+                            textResult += result;
+
+                        textBox.Text = textResult;  
                     }
+                    else
+                        recognizer.MssgFeedback = "No se ha reconocido su trazo";
+                    FeedbackText.Text = recognizer.MssgFeedback;
                 }
-                textBox.ScrollToEnd();
+                //textBox.ScrollToEnd();
                 ResetCanvas();
             }
         }
 
         private void Borrar_Click(object sender, RoutedEventArgs e)
         {
-            textResult = " ";
-            textBox.Text = textResult;
+            ResetText();
         }
 
         private void ResetCanvas()
         {
-            m_analyzer.RemoveStrokes(canvasTinta.Strokes);
-            canvasTinta.Strokes.Clear();
+            if(canvasTinta.Strokes.Count() > 0)
+            {
+                m_analyzer.RemoveStrokes(canvasTinta.Strokes);
+                canvasTinta.Strokes.Clear();
+            }
+
         }
 
         private void Modo1_Checked(object sender, RoutedEventArgs e)
         {
             recognizer.Mode = 1;
+            ResetCanvas();
+            ResetText();
         }
 
         private void Modo2_Checked(object sender, RoutedEventArgs e)
         {
             recognizer.Mode = 2;
+            ResetCanvas();
+            ResetText();
+        }
+
+        private void ResetText()
+        {
+            textResult = " ";
+            textBox.Text = textResult;
         }
     }
 }

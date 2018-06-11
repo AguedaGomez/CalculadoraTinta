@@ -5,33 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculadoraTinta"
         mc:Ignorable="d"
-        Title="Calculadora" Height="450" Width="800">
+        Title="Calculadora" Height="800" Width="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
-        <InkCanvas Name="canvasTinta"></InkCanvas>
-
-        <TextBox Grid.Row="1" Name="textBox" Height="200"
-                 VerticalScrollBarVisibility="Visible">
+        <TextBox  Name="textBox" TextWrapping="WrapWithOverflow" Background="LightGray"
+                  FontSize="80" FontFamily="Console" Foreground="Black" VerticalAlignment="Center"
+                  IsEnabled="False">
         </TextBox>
+
+        <InkCanvas Name="canvasTinta" Grid.Row="1"></InkCanvas>
 
         <Button Grid.Row="2" Name="Borrar" Click="Borrar_Click">Borrar</Button>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <RadioButton Name="Modo1" IsChecked="True" Checked="Modo1_Checked">Modo 1</RadioButton>
-            <RadioButton Name="Modo2" Checked="Modo2_Checked">Modo 2</RadioButton>
-        </StackPanel>
+        <Grid Grid.Row="3">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <RadioButton Name="Modo1" Grid.Column="0" IsChecked="True" Checked="Modo1_Checked" Margin="2">Modo 1</RadioButton>
+            <RadioButton Name="Modo2" Grid.Column="1" Checked="Modo2_Checked" Margin="2">Modo 2</RadioButton>
+            <TextBox Name="FeedbackText" Grid.Column="2" Margin="2" HorizontalAlignment="Right"/>
+        </Grid>
 
     </Grid>
 </Window>

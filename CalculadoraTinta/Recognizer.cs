@@ -11,6 +11,9 @@ namespace CalculadoraTinta
     public class Recognizer
     {
         public int Mode { get; set; }
+        public string MssgFeedback { get; set; }
+        public bool CompletedOperation { get; set; }
+
         readonly List<string> numbers = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         readonly List<string> multiplyOperators = new List<string>() { "x", "X", "*" };
         readonly List<string> divisionOperators = new List<string>() { "/", "%" };
@@ -21,6 +24,7 @@ namespace CalculadoraTinta
 
         public string EvaluateString(string input)
         {
+            MssgFeedback = "";
             string result = "";
             if (Mode == 1)
             {
@@ -29,9 +33,17 @@ namespace CalculadoraTinta
 
                     if (input == equal)
                     {
+                        if (numbers.Contains(operation[operation.Length - 1].ToString()))
+                        {
+                            result = " = " + new DataTable().Compute(operation, null).ToString();
+                            operation = "";
+                            CompletedOperation = true;
+                        }
+                        else
+                        {
+                            MssgFeedback = "Falta un operando en la operación introducida";
+                        }
 
-                        result = " = " + new DataTable().Compute(operation, null).ToString() + "\n";
-                        operation = " ";
                     }
                     else
                     {
@@ -50,12 +62,18 @@ namespace CalculadoraTinta
                             operation += input;
                             result += " " + input + " ";
                         }
+                        CompletedOperation = false;
 
                     }
 
                 }
                 else
+                {
                     result = "?";
+                    MssgFeedback = "Se ha introducido un caracter no permitido";
+                    CompletedOperation = false;
+                }
+                    
             }
             else if (Mode == 2)
             {
@@ -65,13 +83,25 @@ namespace CalculadoraTinta
                     if (numbers.Contains(s) | multiplyOperators.Contains(s) | divisionOperators.Contains(s) | s == equal | s == sustraction | s == addition)
                         if (multiplyOperators.Contains(s))
                             result += "*";
+                        else if (s == equal)
+                            result += "";
                         else
                             result += s;
- 
+
                 }
-                result += " = " + new DataTable().Compute(result, null).ToString() + "\n";
+                if (result != "")
+                   if (numbers.Contains(result[result.Length - 1].ToString()))
+                    {
+                        if (result != input & !result.Contains('*'))
+                            MssgFeedback = "Se han eliminado algunos caracteres no permitidos \n La expresión original reconocida original ha sido: " + input;
+                        result += " = " + new DataTable().Compute(result, null).ToString();
+                        CompletedOperation = true;
+
+                    }           
+                    else 
+                        MssgFeedback = "Falta un operando en la operación introducida";
             }
-               
+
             return result;
 
         }
